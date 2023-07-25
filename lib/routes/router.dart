@@ -1,11 +1,21 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
-import 'package:qrcode/pages/login_page.dart';
 
 import '/pages/home_page.dart';
+import '/pages/login_page.dart';
 
 part 'route_name.dart';
 
 final router = GoRouter(
+  redirect: (context, state) {
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    if (auth.currentUser == null) {
+      return '/login';
+    }
+
+    return null;
+  },
   routes: [
     GoRoute(
       path: '/',
@@ -15,7 +25,7 @@ final router = GoRouter(
     GoRoute(
       path: '/login',
       name: Routes.login,
-      builder: (context, state) => const LoginPage(),
+      builder: (context, state) => LoginPage(),
     ),
   ],
 );
